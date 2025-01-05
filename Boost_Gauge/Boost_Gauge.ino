@@ -7,12 +7,13 @@ TFT_eSPI tft = TFT_eSPI();  // Invoke custom library
 
 int frm = 0; 
 int frm_int = 1; 
+String input; 
 
 void setup()
 {
   Serial.begin(115200);
   tft.begin();
-  tft.setRotation(1);	// landscape
+  tft.setRotation(0);	// landscape
 
   tft.fillScreen(TFT_BLACK);
 
@@ -22,13 +23,14 @@ void setup()
 
 void loop()
 {
-  frm = frm + frm_int; 
-  if ((frm > 60) && (frm_int > 0)) {
-    frm = 60; 
-    frm_int = -1;
-  } else if ((frm < 0) && (frm_int < 0)) {
-    frm = 0; 
-    frm_int = 1; 
+  if(Serial.available()){
+    input = Serial.readStringUntil('\n');
+    if (input == "W") {
+      frm = frm + 1;   
+    }
+    else if (input == "S") {
+      frm = frm - 1; 
+    }
   }
 
   // Draw the boost frame 
